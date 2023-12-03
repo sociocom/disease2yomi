@@ -1,0 +1,4 @@
+.env/*
+.venv/*
+.git/*
+rsync -auvz --exclude-from .rsyncignore . shuntaro-o@kohaku.naist.jp

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Result</title>
+    </head>
+    <body>
+    <h>{{name}}</h>
+    {% extends "layout.html" %}
+    {% block title %} Test {% endblock %}
+    {% block head %} {{ super() }} {% endblock %}
+    {% block body %}
+        {% include "map.html" %}
+    {% endblock %}
+    </body>
+</html>

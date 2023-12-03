@@ -1,0 +1,30 @@
+version: '3'
+services:
+  diseasetoyomi:
+    restart: always
+    build: .
+    container_name: 'diseasetoyomi-api'
+    # working_dir: '/app'
+    # tty: true
+    volumes:
+      - .:/app
+      # - ./data:/app/data
+      # - ./txt2conll:/app/txt2conll
+      # - ./test_output:/app/test_output
+      # - ./conll2xml:/app/conll2xml
+      # - ./models:/app/models
+      # - .:/app
+    ports:
+      # - '10000:10000'
+      - '10101:10101'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    # command: poetry run python disease2yomi/app.py
+    # command: poetry run python disease2yomi/estimate.py
+    # command: poetry run python disease2yomi/disease2yomi_v2.py
+    command: poetry run python disease2yomi/test.py

@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "disease2yomi"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^2.2.2"
+torch = { url = "https://download.pytorch.org/whl/cu116/torch-1.12.1%2Bcu116-cp310-cp310-linux_x86_64.whl" }
+transformers = {extras = ["sentencepiece"], version = "^4.35.2"}
+pytorch-lightning = "^1.8.6"
+python-dotenv = "^0.21.0"
+sentencepiece = "^0.1.99"
+simpletransformers = "^0.64.3"
+datasets = "^2.15.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

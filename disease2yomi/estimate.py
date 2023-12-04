@@ -120,7 +120,7 @@ def estimate_yomi(disease_name):
 
     # 転移学習済みモデル
     # MODEL_DIR = f"{MYAPP_PATH}/trained_model"
-    MODEL_DIR = "./trained_model"
+    MODEL_DIR = f"disease2yomi/trained_model"
 
     # https://github.com/neologd/mecab-ipadic-neologd/wiki/Regexp.ja から引用・一部改変
 
@@ -168,7 +168,7 @@ def estimate_yomi(disease_name):
     args = argparse.Namespace(**args_dict)
 
     # トークナイザー（SentencePiece）
-    tokenizer = T5Tokenizer.from_pretrained(MODEL_DIR, is_fast=True)
+    tokenizer = T5Tokenizer.from_pretrained(MODEL_DIR, is_fast=True, local_files_only=True)
     # tokenizer = T5Tokenizer.from_pretrained(PRETRAINED_MODEL_NAME, is_fast=True)
 
     # 学習済みモデル
@@ -214,4 +214,4 @@ def estimate_yomi(disease_name):
     yomi = generated_titles[0]
     return yomi
 
-print(estimate_yomi("帯状疱疹"))
+# print(estimate_yomi("帯状疱疹"))

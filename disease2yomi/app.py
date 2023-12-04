@@ -13,7 +13,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route(PREFIX + "/index", methods=["post"])
+@app.route(PREFIX + "/result", methods=["post"])
 def post():
     disease_name = request.form["name"]
     yomi = estimate_yomi(disease_name)

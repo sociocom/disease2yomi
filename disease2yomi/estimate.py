@@ -3,24 +3,9 @@ import re
 import unicodedata
 import argparse
 import random
-import os
-from dotenv import load_dotenv
 import numpy as np
 import torch
 from transformers import T5ForConditionalGeneration, T5Tokenizer
-
-
-
-
-# from transformers import BertTokenizer
-
-
-
-
-# .envファイルをロードして環境変数へ反映
-load_dotenv()
-# 環境変数を参照
-MYAPP_PATH = os.getenv('PROJECT_PATH')
 
 
 def unicode_normalize(cls, s):
@@ -107,19 +92,11 @@ def preprocess_body(text):
     return get_normalized_text(text)
 
 def estimate_yomi(disease_name):
-    # tokenizer = BertTokenizer.from_pretrained(
-    #     "cl-tohoku/bert-base-japanese-whole-word-masking"
-    # )
-
-
-
-
     # disease2yomi_v1.ipynb
     # 事前学習済みモデル
     PRETRAINED_MODEL_NAME = "sonoisa/t5-base-japanese"
 
     # 転移学習済みモデル
-    # MODEL_DIR = f"{MYAPP_PATH}/trained_model"
     MODEL_DIR = f"disease2yomi/trained_model"
 
     # https://github.com/neologd/mecab-ipadic-neologd/wiki/Regexp.ja から引用・一部改変
@@ -169,7 +146,6 @@ def estimate_yomi(disease_name):
 
     # トークナイザー（SentencePiece）
     tokenizer = T5Tokenizer.from_pretrained(MODEL_DIR, is_fast=True, local_files_only=True)
-    # tokenizer = T5Tokenizer.from_pretrained(PRETRAINED_MODEL_NAME, is_fast=True)
 
     # 学習済みモデル
     trained_model = T5ForConditionalGeneration.from_pretrained(MODEL_DIR)
@@ -213,5 +189,6 @@ def estimate_yomi(disease_name):
 
     yomi = generated_titles[0]
     return yomi
+
 
 # print(estimate_yomi("帯状疱疹"))

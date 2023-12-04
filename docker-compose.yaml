@@ -1,6 +1,5 @@
 version: "3"
 services:
-  # riskun:
   diseasetoyomi:
     restart: always
     build:
@@ -11,7 +10,6 @@ services:
       # - ./data:/app/data
       - .:/app
     ports:
-      # - 127.0.0.1:7000:7000
       - 127.0.0.1:10101:10101
     deploy:
       resources:
@@ -21,8 +19,6 @@ services:
               count: 1
               capabilities: [gpu]
     # command: ["app.py", "--server.port", "7000", "--server.baseUrlPath=/riskun"]
-    # command: ["disease2yomi/app.py", "--server.port", "10101", "--server.baseUrlPath=/diseasetoyomi"]
-    # command: ["disease2yomi/test.py", "--server.port", "10101", "--server.baseUrlPath=/diseasetoyomi"]
     # command: poetry run python disease2yomi/test.py
     # command: python disease2yomi/estimate.py
     command: python disease2yomi/app.py

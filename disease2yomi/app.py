@@ -17,7 +17,7 @@ def post():
     disease_name = request.form["name"]
     yomi = estimate_yomi(disease_name)
     return render_template(
-        "yomi.html",
+        "result.html",
         disease_name=disease_name,
         yomi=yomi,
     )

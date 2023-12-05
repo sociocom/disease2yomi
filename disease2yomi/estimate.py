@@ -97,7 +97,7 @@ def estimate_yomi(disease_name):
     PRETRAINED_MODEL_NAME = "sonoisa/t5-base-japanese"
 
     # 転移学習済みモデル
-    MODEL_DIR = f"disease2yomi/trained_model"
+    MODEL_DIR = f"disease2yomi/trained_model/to_yomi"
 
     # https://github.com/neologd/mecab-ipadic-neologd/wiki/Regexp.ja から引用・一部改変
 

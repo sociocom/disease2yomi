@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from estimate import estimate_yomi
+from estimate import estimate_yomi, estimate_icd10
 
 
 app = Flask(__name__)
@@ -16,10 +16,12 @@ def index():
 def post():
     disease_name = request.form["name"]
     yomi = estimate_yomi(disease_name)
+    icd10 = estimate_icd10(disease_name)
     return render_template(
         "result.html",
         disease_name=disease_name,
         yomi=yomi,
+        icd10=icd10,
     )
 
 

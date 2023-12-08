@@ -19,6 +19,7 @@ services:
               count: 1
               capabilities: [gpu]
     # command: ["app.py", "--server.port", "7000", "--server.baseUrlPath=/riskun"]
+    command: ["disease2yomi/app.py", "--server.port", "10101", "--server.baseUrlPath=/diseasetoyomi"]
     # command: poetry run python disease2yomi/test.py
     # command: python disease2yomi/estimate.py
-    command: python disease2yomi/app.py
+    # command: python disease2yomi/app.py

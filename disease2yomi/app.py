@@ -1,12 +1,6 @@
-import re
 import pandas as pd
-from transformers import T5Tokenizer, T5ForConditionalGeneration
-import torch
-from tqdm import tqdm
 from datetime import datetime
-import mojimoji
-from utils import generate_text_from_model
-import base64
+from estimate import estimate_yomi_from_file, estimate_icd10_from_file
 import streamlit as st
 import streamlit_ext as ste
 from io import StringIO
@@ -144,16 +138,15 @@ def read_uploaded_file_as_utf8(uploaded_file):
 # def main():
 uploaded_file = set_streamlit()
 
-# 以下を変更？
-generator = GenerateText(
-    data_batch_size=4,
-    token_max_length_src=512,
-    token_max_length_tgt=8,
-)
-target_columns = [
-    "フリガナ",
-    "ICD-10コード",
-]
+# generator = GenerateText(
+#     data_batch_size=4,
+#     token_max_length_src=512,
+#     token_max_length_tgt=8,
+# )
+# target_columns = [
+#     "フリガナ",
+#     "ICD-10コード",
+# ]
 
 if uploaded_file:
     df = read_uploaded_file_as_utf8(uploaded_file)
@@ -168,22 +161,24 @@ if uploaded_file:
     st.write("選択した列:", text)
 
     if text:
-        with st.spinner("実行中..."):
-            # 以下を変更
-            # ここから再開
-            # output_df
-            # tokenizer, model = generator.download_model()
-            for i, column in enumerate(target_columns):
-                column_df = generator.generate_text(model, tokenizer, df, text, column)
-                display_df = column_df.copy()
-                display_df[text] = display_df[text].iloc[:5].str[:5] + "..."
+        with st.spinner("フリガナを推定中..."):
+            output_df = df[text]
+            output_df['フリガナ'] = estimate_yomi_from_file(df=output_df, column=text)
+        with st.spinner("ICD-10コードを推定中..."):
+            output_df['ICD-10コード'] = estimate_icd10_from_file(df=output_df, column=text)
 
-                if i == 0:
-                    output_df = column_df
-                    mytable = st.table(display_df.iloc[:5].T)
-                else:
-                    output_df = pd.merge(output_df, column_df, on=text, how="inner")
-                    mytable.add_rows(display_df[[column]].iloc[:5].T)
+            # # tokenizer, model = generator.download_model()
+            # for i, column in enumerate(target_columns):
+            #     column_df = generator.generate_text(model, tokenizer, df, text, column)
+            #     # display_df = column_df.copy()
+            #     # display_df[text] = display_df[text].iloc[:5].str[:5] + "..."
+
+            #     if i == 0:
+            #         output_df = column_df
+            #         # mytable = st.table(display_df.iloc[:5].T)
+            #     else:
+            #         output_df = pd.merge(output_df, column_df, on=text, how="inner")
+            #         # mytable.add_rows(display_df[[column]].iloc[:5].T)
 
         st.write("推定結果 (先頭5件までを表示)")
         st.dataframe(output_df.head(5))
@@ -203,37 +198,3 @@ if uploaded_file:
 
 # if __name__ == "__main__":
 # main()
-
-
-
-
-from flask import Flask, render_template, request
-from estimate import estimate_yomi, estimate_icd10
-
-
-app = Flask(__name__)
-PREFIX = "/diseasetoyomi"
-
-
-@app.route(PREFIX + "/")
-def index():
-    name = request.args.get("name")
-    return render_template("index.html")
-
-
-@app.route(PREFIX + "/result", methods=["post"])
-def post():
-    disease_name = request.form["name"]
-    yomi = estimate_yomi(disease_name)
-    icd10 = estimate_icd10(disease_name)
-    return render_template(
-        "result.html",
-        disease_name=disease_name,
-        yomi=yomi,
-        icd10=icd10,
-    )
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True, port=10101)
-    # app.run(debug=True, port=5001)

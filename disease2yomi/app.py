@@ -17,8 +17,10 @@ def set_streamlit():
             # "Get Help": "https://www.extremelycoolapp.com/help",
             # "Report a bug": "https://www.extremelycoolapp.com/bug",
             "About": """
-            # Yomi and ICD-10 code estimator from disease name
-            病名や症状からそのフリガナとICD-10コードを推定するWebアプリです。""",
+            ## Yomi and ICD-10 code estimator from disease name
+            病名や症状からそのフリガナとICD-10コードを推定するWebアプリです。
+
+            奈良先端科学技術大学院大学 ソーシャル・コンピューティング研究室""",
         },
     )
     st.title("Yomi and ICD-10 code estimator from disease name")
@@ -35,6 +37,9 @@ def set_streamlit():
     uploaded_file = st.sidebar.file_uploader(
         "Choose a CSV file", accept_multiple_files=False
     )
+
+    st.sidebar.markdown("奈良先端科学技術大学院大学 ソーシャル・コンピューティング研究室")
+
     return uploaded_file
 
 def convert_to_utf8(content, encoding):
@@ -162,10 +167,13 @@ if uploaded_file:
 
     if text:
         with st.spinner("フリガナを推定中..."):
-            output_df = df[text]
+            output_df = pd.DataFrame()
+            output_df[text] = df[text]
             output_df['フリガナ'] = estimate_yomi_from_file(df=output_df, column=text)
+        st.write("フリガナの推定が完了しました")
         with st.spinner("ICD-10コードを推定中..."):
             output_df['ICD-10コード'] = estimate_icd10_from_file(df=output_df, column=text)
+        st.write("ICD-10コードの推定が完了しました")
 
             # # tokenizer, model = generator.download_model()
             # for i, column in enumerate(target_columns):

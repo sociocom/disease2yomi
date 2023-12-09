@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime
-from estimate import estimate_yomi_from_file, estimate_icd10_from_file
+from estimate import estimate_yomi, estimate_icd10, estimate_yomi_from_file, estimate_icd10_from_file
 import streamlit as st
 import streamlit_ext as ste
 from io import StringIO
@@ -142,6 +142,15 @@ def read_uploaded_file_as_utf8(uploaded_file):
 
 # def main():
 uploaded_file = set_streamlit()
+
+disease_name = st.text_input('病名や症状を入力してください')
+if disease_name:
+    with st.spinner("フリガナを推定中..."):
+        yomi = estimate_yomi(disease_name)
+    st.write(f"推定されたフリガナ：**{yomi}**")
+    with st.spinner("ICD-10コードを推定中..."):
+        icd10 = estimate_icd10(disease_name)
+    st.write(f"推定されたICD-10コード：**{icd10}**")
 
 # generator = GenerateText(
 #     data_batch_size=4,

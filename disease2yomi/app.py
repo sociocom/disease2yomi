@@ -170,10 +170,10 @@ if uploaded_file:
             output_df = pd.DataFrame()
             output_df[text] = df[text]
             output_df['フリガナ'] = estimate_yomi_from_file(df=output_df, column=text)
-        st.write("フリガナの推定が完了しました")
+        st.write("✅ フリガナの推定が完了しました")
         with st.spinner("ICD-10コードを推定中..."):
             output_df['ICD-10コード'] = estimate_icd10_from_file(df=output_df, column=text)
-        st.write("ICD-10コードの推定が完了しました")
+        st.write("✅ ICD-10コードの推定が完了しました")
 
             # # tokenizer, model = generator.download_model()
             # for i, column in enumerate(target_columns):

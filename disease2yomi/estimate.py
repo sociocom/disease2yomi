@@ -354,7 +354,7 @@ def estimate_yomi_from_file(df, column):
     # 推論モード設定
     trained_model.eval()
 
-    list_yomi = []
+    list_yomi = [""] * len(df[column])
     for i in range(len(df[column])):
         body = df[column][i]
 
@@ -382,7 +382,7 @@ def estimate_yomi_from_file(df, column):
                                             clean_up_tokenization_spaces=False) 
                             for ids in outputs]
 
-        list_yomi.append(generated_titles[0])
+        list_yomi[i] = generated_titles[0]
     return list_yomi
 
 def estimate_icd10_from_file(df, column):
@@ -453,7 +453,7 @@ def estimate_icd10_from_file(df, column):
     # 推論モード設定
     trained_model.eval()
 
-    list_icd10 = []
+    list_icd10 = [""] * len(df[column])
     for i in range(len(df[column])):
         body = df[column][i]
 
@@ -481,7 +481,7 @@ def estimate_icd10_from_file(df, column):
                                             clean_up_tokenization_spaces=False) 
                             for ids in outputs]
 
-        list_icd10.append(generated_titles[0].upper())
+        list_icd10[i] = generated_titles[0].upper()
     return list_icd10
 
 

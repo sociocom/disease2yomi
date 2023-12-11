@@ -30,7 +30,7 @@ def set_streamlit():
     st.sidebar.write("### サンプルファイルで実行する場合は以下のファイルをダウンロードしてください")
     sample_csv = pd.read_csv("disease2yomi/data/sample_data_100.csv")
     sample_csv = sample_csv.to_csv(index=False)
-    ste.sidebar.download_button("sample data", sample_csv, f"disease_name_sample.csv")
+    ste.sidebar.download_button("sample data", sample_csv, f"disease_name_sample_100.csv")
 
     st.sidebar.markdown("### フリガナとICD-10コードを推定するcsvファイルを選択してください")
     # ファイルアップロード

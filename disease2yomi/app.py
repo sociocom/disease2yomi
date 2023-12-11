@@ -28,7 +28,7 @@ def set_streamlit():
     st.markdown("病名や症状からそのフリガナとICD-10コードを推定するWebアプリです。")
 
     st.sidebar.write("### サンプルファイルで実行する場合は以下のファイルをダウンロードしてください")
-    sample_csv = pd.read_csv("disease2yomi/data/sample_data.csv")
+    sample_csv = pd.read_csv("disease2yomi/data/sample_data_100.csv")
     sample_csv = sample_csv.to_csv(index=False)
     ste.sidebar.download_button("sample data", sample_csv, f"disease_name_sample.csv")
 

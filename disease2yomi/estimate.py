@@ -4,6 +4,7 @@ import unicodedata
 import argparse
 import random
 import numpy as np
+from stqdm import stqdm
 import torch
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 
@@ -355,7 +356,7 @@ def estimate_yomi_from_file(df, column):
     trained_model.eval()
 
     list_yomi = [""] * len(df[column])
-    for i in range(len(df[column])):
+    for i in stqdm(range(len(df[column]))):
         body = df[column][i]
 
         # 前処理とトークナイズを行う
@@ -454,7 +455,7 @@ def estimate_icd10_from_file(df, column):
     trained_model.eval()
 
     list_icd10 = [""] * len(df[column])
-    for i in range(len(df[column])):
+    for i in stqdm(range(len(df[column]))):
         body = df[column][i]
 
         # 前処理とトークナイズを行う

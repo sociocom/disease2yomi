@@ -14,6 +14,7 @@ requests = "^2.31.0"
 sentencepiece = "^0.1.99"
 streamlit = "^1.27.0"
 streamlit-ext = "^0.1.8"
+stqdm = "^0.0.5"
 
 [build-system]
 requires = ["poetry-core"]

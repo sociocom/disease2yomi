@@ -145,9 +145,10 @@ uploaded_file = set_streamlit()
 
 disease_name = st.text_input('病名や症状を入力してください')
 if disease_name:
+    st.write(f"入力された病名・症状：{disease_name}")
     with st.spinner("フリガナを推定中..."):
         yomi = estimate_yomi(disease_name)
-    st.write(f"推定されたフリガナ：**{yomi}**")
+    st.write(f"推定されたフリガナ　：**{yomi}**")
     with st.spinner("ICD-10コードを推定中..."):
         icd10 = estimate_icd10(disease_name)
     st.write(f"推定されたICD-10コード：**{icd10}**")

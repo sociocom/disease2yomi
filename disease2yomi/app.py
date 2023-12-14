@@ -1,8 +1,10 @@
 import pandas as pd
 from datetime import datetime
+import jaconv
 from estimate import estimate_yomi, estimate_icd10, estimate_yomi_from_file, estimate_icd10_from_file
 import streamlit as st
 import streamlit_ext as ste
+from stqdm import stqdm
 from io import StringIO
 
 
@@ -18,21 +20,21 @@ def set_streamlit():
             # "Report a bug": "https://www.extremelycoolapp.com/bug",
             "About": """
             ## Yomi and ICD-10 code estimator from disease name
-            病名や症状からそのフリガナとICD-10コードを推定するWebアプリです。
+            病名や症状からそのふりがなとICD-10コードを推定するWebアプリです。
 
             奈良先端科学技術大学院大学 ソーシャル・コンピューティング研究室""",
         },
     )
     st.title("Yomi and ICD-10 code estimator from disease name")
     # st.markdown("###### 脳卒中のリスク因子を構造化し、csv形式で出力するシステムです。")
-    st.markdown("病名や症状からそのフリガナとICD-10コードを推定するWebアプリです。")
+    st.markdown("病名や症状からそのふりがなとICD-10コードを推定するWebアプリです。")
 
     st.sidebar.write("### サンプルファイルで実行する場合は以下のファイルをダウンロードしてください")
     sample_csv = pd.read_csv("disease2yomi/data/sample_data_100.csv")
     sample_csv = sample_csv.to_csv(index=False)
     ste.sidebar.download_button("sample data", sample_csv, f"disease_name_sample_100.csv")
 
-    st.sidebar.markdown("### フリガナとICD-10コードを推定するcsvファイルを選択してください")
+    st.sidebar.markdown("### ふりがなとICD-10コードを推定するcsvファイルを選択してください")
     # ファイルアップロード
     uploaded_file = st.sidebar.file_uploader(
         "Choose a CSV file", accept_multiple_files=False
@@ -146,9 +148,10 @@ uploaded_file = set_streamlit()
 disease_name = st.text_input('病名や症状を入力してください')
 if disease_name:
     st.write(f"入力された病名・症状：{disease_name}")
-    with st.spinner("フリガナを推定中..."):
+    with st.spinner("ふりがなを推定中..."):
         yomi = estimate_yomi(disease_name)
-    st.write(f"推定されたフリガナ　：**{yomi}**")
+        yomi = jaconv.kata2hira(yomi)
+    st.write(f"推定されたふりがな　：**{yomi}**")
     with st.spinner("ICD-10コードを推定中..."):
         icd10 = estimate_icd10(disease_name)
     st.write(f"推定されたICD-10コード：**{icd10}**")
@@ -159,7 +162,7 @@ if disease_name:
 #     token_max_length_tgt=8,
 # )
 # target_columns = [
-#     "フリガナ",
+#     "ふりがな",
 #     "ICD-10コード",
 # ]
 
@@ -168,7 +171,7 @@ if uploaded_file:
     st.write("入力ファイル (先頭5件までを表示)")
     st.dataframe(df.head(5))
     text = st.selectbox(
-        "フリガナとICD-10コードを推定する列を選んでください",
+        "ふりがなとICD-10コードを推定する列を選んでください",
         (df.columns),
         index=None,
         placeholder="Select...",
@@ -176,11 +179,13 @@ if uploaded_file:
     st.write("選択した列:", text)
 
     if text:
-        with st.spinner("フリガナを推定中..."):
+        with st.spinner("ふりがなを推定中..."):
             output_df = pd.DataFrame()
             output_df[text] = df[text]
-            output_df['フリガナ'] = estimate_yomi_from_file(df=output_df, column=text)
-        st.write("✅ フリガナの推定が完了しました")
+            output_df['ふりがな'] = estimate_yomi_from_file(df=output_df, column=text)
+            for i in stqdm(range(len(output_df))):
+                output_df.iat[i, 1] = jaconv.kata2hira(output_df.iat[i, 1])
+        st.write("✅ ふりがなの推定が完了しました")
         with st.spinner("ICD-10コードを推定中..."):
             output_df['ICD-10コード'] = estimate_icd10_from_file(df=output_df, column=text)
         st.write("✅ ICD-10コードの推定が完了しました")

@@ -1,2 +1,3 @@
 disease2yomi/trained_model/to_yomi/pytorch_model.bin
 disease2yomi/trained_model/to_icd10/pytorch_model.bin
+disease2yomi/trained_model/to_yomi_of_body/pytorch_model.bin
